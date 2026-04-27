@@ -41,8 +41,7 @@ def urlsafe_b64encode(data: bytes) -> bytes:
 
 def urlsafe_b64decode(data: bytes) -> bytes:
     """urlsafe_b64decode without padding"""
-    pad = b"=" * (4 - (len(data) & 3))
-    return base64.urlsafe_b64decode(data + pad)
+    pass
 
 
 def get_zipinfo_datetime(
@@ -137,55 +136,10 @@ class WheelFile(ZipFile):
         mode: Literal["r", "w"] = "r",
         pwd: bytes | None = None,
     ) -> IO[bytes]:
-        def _update_crc(newdata: bytes) -> None:
-            eof = ef._eof
-            update_crc_orig(newdata)
-            running_hash.update(newdata)
-            if eof and running_hash.digest() != expected_hash:
-                raise WheelError(f"Hash mismatch for file '{ef_name}'")
-
-        ef_name = (
-            name_or_info.filename if isinstance(name_or_info, ZipInfo) else name_or_info
-        )
-        if (
-            mode == "r"
-            and not ef_name.endswith("/")
-            and ef_name not in self._file_hashes
-        ):
-            raise WheelError(f"No hash found for file '{ef_name}'")
-
-        ef = ZipFile.open(self, name_or_info, mode, pwd)
-        if mode == "r" and not ef_name.endswith("/"):
-            algorithm, expected_hash = self._file_hashes[ef_name]
-            if expected_hash is not None:
-                # Monkey patch the _update_crc method to also check for the hash from
-                # RECORD
-                running_hash = hashlib.new(algorithm)
-                update_crc_orig, ef._update_crc = ef._update_crc, _update_crc
-
-        return ef
+        pass
 
     def write_files(self, base_dir: str) -> None:
-        log.info("creating %r and adding %r to it", self.filename, base_dir)
-        deferred: list[tuple[str, str]] = []
-        for root, dirnames, filenames in os.walk(base_dir):
-            # Sort the directory names so that `os.walk` will walk them in a
-            # defined order on the next iteration.
-            dirnames.sort()
-            for name in sorted(filenames):
-                path = os.path.normpath(os.path.join(root, name))
-                if os.path.isfile(path):
-                    arcname = os.path.relpath(path, base_dir).replace(os.path.sep, "/")
-                    if arcname == self.record_path:
-                        pass
-                    elif root.endswith(".dist-info"):
-                        deferred.append((path, arcname))
-                    else:
-                        self.write(path, arcname)
-
-        deferred.sort()
-        for path, arcname in deferred:
-            self.write(path, arcname)
+        pass
 
     def write(
         self,
@@ -237,16 +191,4 @@ class WheelFile(ZipFile):
 
     def close(self) -> None:
         # Write RECORD
-        if self.fp is not None and self.mode == "w" and self._file_hashes:
-            data = StringIO()
-            writer = csv.writer(data, delimiter=",", quotechar='"', lineterminator="\n")
-            writer.writerows(
-                (
-                    (fname, algorithm + "=" + hash_, self._file_sizes[fname])
-                    for fname, (algorithm, hash_) in self._file_hashes.items()
-                )
-            )
-            writer.writerow((format(self.record_path), "", ""))
-            self.writestr(self.record_path, data.getvalue())
-
-        ZipFile.close(self)
+        pass

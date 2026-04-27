@@ -13,64 +13,31 @@ from ..wheelfile import WheelError
 
 
 def unpack_f(args: argparse.Namespace) -> None:
-    from .unpack import unpack
-
-    unpack(args.wheelfile, args.dest)
+    pass
 
 
 def pack_f(args: argparse.Namespace) -> None:
-    from .pack import pack
-
-    pack(args.directory, args.dest_dir, args.build_number)
+    pass
 
 
 def convert_f(args: argparse.Namespace) -> None:
-    from .convert import convert
-
-    convert(args.files, args.dest_dir, args.verbose)
+    pass
 
 
 def tags_f(args: argparse.Namespace) -> None:
-    from .tags import tags
-
-    names = (
-        tags(
-            wheel,
-            args.python_tag,
-            args.abi_tag,
-            args.platform_tag,
-            args.build,
-            args.remove,
-        )
-        for wheel in args.wheel
-    )
-
-    for name in names:
-        print(name)
+    pass
 
 
 def info_f(args: argparse.Namespace) -> None:
-    from .info import info
-
-    try:
-        info(args.wheelfile, args.verbose)
-    except FileNotFoundError as e:
-        raise WheelError(str(e)) from e
+    pass
 
 
 def version_f(args: argparse.Namespace) -> None:
-    from .. import __version__
-
-    print(f"wheel {__version__}")
+    pass
 
 
 def parse_build_tag(build_tag: str) -> str:
-    if build_tag and not build_tag[0].isdigit():
-        raise ArgumentTypeError("build tag must begin with a digit")
-    elif "-" in build_tag:
-        raise ArgumentTypeError("invalid character ('-') in build tag")
-
-    return build_tag
+    pass
 
 
 TAGS_HELP = """\

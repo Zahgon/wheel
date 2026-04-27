@@ -18,7 +18,7 @@ from packaging.requirements import Requirement
 
 
 def _nonblank(str: str) -> bool | Literal[""]:
-    return str and not str.startswith("#")
+    pass
 
 
 @functools.singledispatch
@@ -41,7 +41,7 @@ def yield_lines(iterable: Iterable[str]) -> Iterator[str]:
 
 @yield_lines.register(str)
 def _(text: str) -> Iterator[str]:
-    return filter(_nonblank, map(str.strip, text.splitlines()))
+    pass
 
 
 def split_sections(

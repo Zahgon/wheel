@@ -6,7 +6,7 @@ import sys
 
 
 def _not_warning(record: logging.LogRecord) -> bool:
-    return record.levelno < logging.WARNING
+    pass
 
 
 def configure() -> None:
